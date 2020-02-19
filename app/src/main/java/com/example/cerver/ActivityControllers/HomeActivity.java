@@ -1,4 +1,4 @@
-package com.example.cerver.Activities;
+package com.example.cerver.ActivityControllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import com.example.cerver.R;
 import com.example.cerver.Services.FirebaseService;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -36,7 +35,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
-    Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
 

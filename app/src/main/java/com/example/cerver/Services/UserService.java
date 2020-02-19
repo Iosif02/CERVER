@@ -56,7 +56,6 @@ public class UserService extends Service {
         reff = FirebaseDatabase.getInstance().getReference().child("user_details");
 
         Map<String, Object> userDetails = new HashMap<>();
-        userDetails.put("user_id", userId);
         userDetails.put("name", userName);
         userDetails.put("age", userAge);
         userDetails.put("weight", userWeight);
@@ -64,6 +63,20 @@ public class UserService extends Service {
         userDetails.put("sex", userSex);
 
         reff.child(userId).setValue(userDetails);
+    }
+
+    public boolean updateUserDetails(String userId, String userName, String userAge, String userWeight, String userHeight) {
+        reff = FirebaseDatabase.getInstance().getReference().child("user_details").child(userId);
+
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("name", userName);
+        userDetails.put("age", userAge);
+        userDetails.put("weight", userWeight);
+        userDetails.put("height", userHeight);
+
+        reff.setValue(userDetails);
+
+        return true;
     }
 
     @Override

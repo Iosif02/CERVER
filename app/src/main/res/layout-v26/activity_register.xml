@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.RegisterActivity">
+    tools:context=".ActivityControllers.RegisterActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -134,7 +134,7 @@
                 android:text="@string/sign_up_short"
                 android:layout_marginBottom="35dp"
                 android:layout_marginTop="50dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/login"
@@ -142,11 +142,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="36dp"
                 android:textSize="14sp"
-                android:gravity="center"/>
+                android:gravity="center" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <include
+        android:id="@+id/loading"
+        layout="@layout/circular_progressbar"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

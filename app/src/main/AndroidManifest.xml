@@ -16,17 +16,17 @@
             android:exported="true"></service>
 
         <activity
-            android:name=".Activities.HomeActivity"
+            android:name=".ActivityControllers.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".ActivityControllers.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".ActivityControllers.RegisterActivity" />
     </application>
 
 </manifest>

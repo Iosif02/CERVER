@@ -1,4 +1,4 @@
-package com.example.cerver.Activities;
+package com.example.cerver.ActivityControllers;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,8 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cerver.R;
 import com.example.cerver.Services.UserService;
+import com.example.cerver.Validations.SignUpValidations;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText emailId, password, name, age, weight, height;
@@ -26,14 +29,15 @@ public class RegisterActivity extends AppCompatActivity {
     TextView tvSignIn;
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    String userSex = null;
     UserService userService;
+    SignUpValidations signUpValidations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        signUpValidations = new SignUpValidations();
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         btnSignUp = findViewById(R.id.sign_up);
@@ -58,12 +62,15 @@ public class RegisterActivity extends AppCompatActivity {
                 final String userWeight = weight.getText().toString();
                 final String userHeight = height.getText().toString();
 
-                if(validateForm(email, pwd, userName, userAge, userWeight, userHeight, userSex[0])) {
+                Map errors = signUpValidations.validate(email, pwd, userName, userAge, userWeight, userHeight, userSex[0]);
+                if(errors.isEmpty()) {
                     String result = userService.createUser(email, pwd, userName, userAge, userWeight, userHeight, userSex[0]);
                     if(result.equals(userService.SUCCESS)) {
-                        Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
-                        startActivity(i);
+                        findViewById(R.id.linearLayout).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.loading).setVisibility(View.VISIBLE);
                     }
+                } else {
+                    validateForm(errors);
                 }
             }
         });
@@ -103,48 +110,46 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    protected boolean validateForm(String email, String pwd, String userName, String userAge, String userWeight, String userHeight, String userSex) {
-        boolean error = false;
-        if(pwd.isEmpty()) {
-            password.setError("Please enter your password");
+    protected void validateForm(Map errors) {
+        Object passwordError = errors.get("password");
+        Object emailError = errors.get("email");
+        Object nameError = errors.get("name");
+        Object ageError = errors.get("age");
+        Object heightError = errors.get("height");
+        Object weightError = errors.get("weight");
+        Object sexError = errors.get("sex");
+
+        if(passwordError != null) {
+            password.setError(passwordError.toString());
             password.requestFocus();
-            error = true;
         }
-        if(userWeight.isEmpty()) {
-            weight.setError("Please enter your weight");
+        if(weightError != null) {
+            weight.setError(weightError.toString());
             weight.requestFocus();
-            error = true;
         }
-        if(userHeight.isEmpty()) {
-            height.setError("Please enter your height");
+        if(heightError != null) {
+            height.setError(heightError.toString());
             height.requestFocus();
-            error = true;
         }
-        if(userSex.isEmpty() || userSex.equals("Sex")) {
+        if(sexError != null) {
             sex.requestFocus();
             TextView errorText = (TextView)sex.getSelectedView();
             errorText.setError("");
             errorText.setTextColor(Color.RED);
-            errorText.setText("Please enter your sex");
-            error = true;
+            errorText.setText(sexError.toString());
         }
-        if(userAge.isEmpty()) {
-            age.setError("Please enter your age");
+        if(ageError != null) {
+            age.setError(ageError.toString());
             age.requestFocus();
-            error = true;
         }
-        if(userName.isEmpty()) {
-            name.setError("Please enter your name");
+        if(nameError != null) {
+            name.setError(nameError.toString());
             name.requestFocus();
-            error = true;
         }
-        if(email.isEmpty()) {
-            emailId.setError("Please enter email");
+        if(emailError != null) {
+            emailId.setError(emailError.toString());
             emailId.requestFocus();
-            error = true;
         }
-
-        return !error;
     }
 
     @Override
