@@ -19,6 +19,7 @@ import com.example.cerver.Services.UserService;
 import com.example.cerver.Validations.SignUpValidations;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.Map;
 
@@ -64,8 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 Map errors = signUpValidations.validate(email, pwd, userName, userAge, userWeight, userHeight, userSex[0]);
                 if(errors.isEmpty()) {
-                    String result = userService.createUser(email, pwd, userName, userAge, userWeight, userHeight, userSex[0]);
-                    if(result.equals(userService.SUCCESS)) {
+                    DatabaseReference result = userService.createUser(email, pwd, userName, userAge, userWeight, userHeight, userSex[0]);
+                    if(result != null) {
                         findViewById(R.id.linearLayout).setVisibility(View.INVISIBLE);
                         findViewById(R.id.loading).setVisibility(View.VISIBLE);
                     }
