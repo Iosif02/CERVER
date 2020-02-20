@@ -2,21 +2,34 @@ package com.example.cerver.Services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class UserService extends Service {
     DatabaseReference reff;
@@ -58,7 +71,7 @@ public class UserService extends Service {
         return reff;
     }
 
-    public boolean updateUserDetails(String userId, String userName, String userAge, String userWeight, String userHeight) {
+    public DatabaseReference updateUserDetails(String userId, String userName, String userAge, String userWeight, String userHeight, Bitmap profileImage) {
         reff = FirebaseDatabase.getInstance().getReference().child("user_details").child(userId);
 
         Map<String, Object> userDetails = new HashMap<>();
@@ -69,7 +82,44 @@ public class UserService extends Service {
 
         reff.setValue(userDetails);
 
-        return true;
+        if(profileImage != null) {
+            updateProfileImage(profileImage, userId);
+        }
+
+        return reff;
+    }
+
+    public void updateProfileImage(Bitmap bitmap, String userId) {
+        StorageReference reference = FirebaseStorage.getInstance().getReference().child("profileImages").child(userId);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+        reference.putBytes(baos.toByteArray()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                getDownloadUrl(reference);
+            }
+        });
+    }
+
+    private void getDownloadUrl(StorageReference reference) {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d(TAG, "Img Success " + uri);
+                setUserProfileUri(uri);
+            }
+        });
+    }
+
+    private void setUserProfileUri(Uri uri) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setPhotoUri(uri).build();
+
+        if(user != null)
+            user.updateProfile(request);
     }
 
     @Override

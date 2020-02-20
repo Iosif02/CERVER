@@ -50,7 +50,6 @@ public class User {
                         dataSnapshot.child("height").getValue(String.class),
                         dataSnapshot.child("sex").getValue(String.class)
                 );
-                Log.d("User details firebase", dataSnapshot.toString());
                 firebaseCallback.onCallback(userDetails);
             }
 

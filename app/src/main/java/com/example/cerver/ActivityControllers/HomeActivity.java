@@ -3,6 +3,7 @@ package com.example.cerver.ActivityControllers;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.cerver.Classes.User;
 import com.example.cerver.Classes.UserDetails;
 import com.example.cerver.R;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,6 +110,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if(email != null) {
                 TextView emailField = (TextView) v.findViewById(R.id.email);
                 emailField.setText(email);
+            }
+            if(fUser.getPhotoUrl() != null) {
+                ImageView image = (ImageView) v.findViewById(R.id.avatar);
+                Glide.with(this).load(fUser.getPhotoUrl()).into(image);
             }
         }
     }
