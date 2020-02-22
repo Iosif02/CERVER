@@ -43,7 +43,6 @@ public class User {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserDetails userDetails = new UserDetails(
-                        dataSnapshot.child("user_id").getValue(String.class),
                         dataSnapshot.child("name").getValue(String.class),
                         dataSnapshot.child("age").getValue(String.class),
                         dataSnapshot.child("weight").getValue(String.class),

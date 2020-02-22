@@ -3,28 +3,18 @@ package com.example.cerver.Classes;
 import android.util.Log;
 
 public class UserDetails {
-    private String User_id;
     private String Name;
     private String Age;
     private String Weight;
     private String Height;
     private String Sex;
 
-    public UserDetails(String id, String name, String age, String weight, String height, String sex) {
-        User_id = id;
+    public UserDetails(String name, String age, String weight, String height, String sex) {
         Name = name;
         Age = age;
         Weight = weight;
         Height = height;
         Sex = sex;
-    }
-
-    public String getUser_id() {
-        return User_id;
-    }
-
-    public void setUser_id(String user_id) {
-        User_id = user_id;
     }
 
     public String getName() {

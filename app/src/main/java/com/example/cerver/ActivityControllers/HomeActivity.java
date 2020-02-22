@@ -1,5 +1,6 @@
 package com.example.cerver.ActivityControllers;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,13 +11,16 @@ import com.example.cerver.R;
 import com.example.cerver.Services.FirebaseService;
 
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
+import com.example.cerver.Services.UserService;
 import com.example.cerver.ui.settings.SettingsFragment;
+import com.example.cerver.ui.share.TaskFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,8 +41,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
-    DrawerLayout drawerLayout;
+    DrawerLayout drawerLayout, homeDrawer;
     NavigationView navigationView;
+    public Menu navMenus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
+        navMenus = navigationView.getMenu();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.setDrawerListener(toggle);
@@ -58,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         getUserDetails();
+        showAdminMenu();
     }
 
     @Override
@@ -79,6 +86,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new SettingsFragment()).commit();
+                break;
+            case R.id.tasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, new TaskFragment()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -102,7 +112,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     if(userDetails != null) {
                         TextView userNameField = (TextView) v.findViewById(R.id.user_name);
                         userNameField.setText(userDetails.getName());
-                        Log.d("User details", userDetails.toString());
                     }
                 }
             });
@@ -115,6 +124,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ImageView image = (ImageView) v.findViewById(R.id.avatar);
                 Glide.with(this).load(fUser.getPhotoUrl()).into(image);
             }
+        }
+    }
+
+    public void showAdminMenu() {
+        FirebaseUser fUser = mFirebaseAuth.getCurrentUser();
+        if(fUser !=  null) {
+            String userId = fUser.getUid().toString();
+            UserService userService = new UserService();
+            userService.isAdmin(new FirebaseService.isAdminCallback() {
+                @Override
+                public void onCallback(boolean isAdmin) {
+                    if(isAdmin) {
+                        navMenus.findItem(R.id.menu_admin).setVisible(true);
+                    }
+                }
+            }, userId);
         }
     }
 }

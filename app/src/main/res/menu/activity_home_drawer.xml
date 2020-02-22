@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    android:id="@+id/menu">
 
     <group android:checkableBehavior="single">
         <item
@@ -17,6 +18,19 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_friends" />
     </group>
+
+    <item
+        android:id="@+id/menu_admin"
+        android:title="@string/menu_admin"
+        android:visible="false">
+
+        <menu>
+            <item
+                android:id="@+id/tasks"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_tasks" />
+        </menu>
+    </item>
 
     <item android:title="@string/menu_user">
         <menu>

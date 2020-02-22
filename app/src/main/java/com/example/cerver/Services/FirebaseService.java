@@ -24,4 +24,8 @@ public class FirebaseService extends Application {
         void onCallback(UserDetails userDetails);
     }
 
+    public interface isAdminCallback {
+        void onCallback(boolean isAdmin);
+    }
+
 }

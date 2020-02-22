@@ -15,6 +15,8 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_send">Chat</string>
     <string name="menu_user">User</string>
+    <string name="menu_admin">Admin</string>
+    <string name="menu_tasks">Tasks</string>
 
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Close</string>
@@ -45,4 +47,12 @@
     // User Details page
     <string name="update_details">Update details</string>
     <string name="user_details">Settings</string>
+
+    // Create task page
+    <string name="create_task">Create Task</string>
+    <string name="task_tile">Title</string>
+    <string name="task_description">Description</string>
+    <string name="task_difficulty">Difficulty</string>
+    <string name="task_experience">Experience</string>
+    <string name="create">Create</string>
 </resources>

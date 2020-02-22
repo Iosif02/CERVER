@@ -10,10 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".Services.UserService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <activity android:name=".ActivityControllers.SelectAvatar"></activity>
 
         <activity
             android:name=".ActivityControllers.HomeActivity"
@@ -27,6 +24,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".ActivityControllers.RegisterActivity" />
+
+        <service
+            android:name=".Services.UserService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".Services.TaskService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

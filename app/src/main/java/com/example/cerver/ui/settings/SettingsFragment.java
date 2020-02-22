@@ -1,7 +1,6 @@
 package com.example.cerver.ui.settings;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
+import com.example.cerver.ActivityControllers.SelectAvatar;
 import com.example.cerver.Classes.User;
 import com.example.cerver.Classes.UserDetails;
 import com.example.cerver.R;
@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,7 +45,6 @@ public class SettingsFragment extends Fragment {
     private UserService userService;
     private UpdateDetailsValidations updateDetailsValidations;
     private ImageView avatar;
-    private String PROFILE_IMAGE_URL = null;
     private int TAKE_IMAGE_CODE = 100;
     private Bitmap profileImage;
 
@@ -92,7 +92,9 @@ public class SettingsFragment extends Fragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePictureIntent();
+//                takePictureIntent();
+                SelectAvatar selectAvatar = new SelectAvatar();
+                selectAvatar.show(getFragmentManager(), "Select avatar");
             }
         });
 
@@ -127,9 +129,9 @@ public class SettingsFragment extends Fragment {
         return root;
     }
 
-    private void takePictureIntent() {
+    public void takePictureIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if(intent.resolveActivity(Objects.requireNonNull(getActivity()).getPackageManager()) != null) {
             startActivityForResult(intent, TAKE_IMAGE_CODE);
         }
     }

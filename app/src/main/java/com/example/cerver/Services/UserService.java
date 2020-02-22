@@ -6,20 +6,22 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.cerver.Classes.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +35,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class UserService extends Service {
     DatabaseReference reff;
+    String ROLE_ADMIN = "1";
+    String ROLE_USER = "2";
 
     public DatabaseReference createUser(String email, String pwd, final String userName, final String userAge, final String userWeight, final String userHeight, final String userSex) {
         FirebaseAuth mFirebaseAuth;
@@ -46,8 +50,9 @@ public class UserService extends Service {
                     if(!task.isSuccessful()) {
                         throw new Exception("An Error Occurred! Please Try Again!");
                     } else {
-                        String id = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
-                        result[0] = createUserDetails(id, userName, userAge, userWeight, userHeight, userSex);
+                        String userId = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
+                        result[0] = createUserDetails(userId, userName, userAge, userWeight, userHeight, userSex);
+                        setUserRole(userId);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -60,12 +65,7 @@ public class UserService extends Service {
     public DatabaseReference createUserDetails(String userId, String userName, String userAge, String userWeight, String userHeight, String userSex) {
         reff = FirebaseDatabase.getInstance().getReference().child("user_details");
 
-        Map<String, Object> userDetails = new HashMap<>();
-        userDetails.put("name", userName);
-        userDetails.put("age", userAge);
-        userDetails.put("weight", userWeight);
-        userDetails.put("height", userHeight);
-        userDetails.put("sex", userSex);
+        UserDetails userDetails = new UserDetails(userName, userAge, userWeight, userHeight, userSex);
 
         reff.child(userId).setValue(userDetails);
         return reff;
@@ -120,6 +120,34 @@ public class UserService extends Service {
 
         if(user != null)
             user.updateProfile(request);
+    }
+
+    private void setUserRole(String userId) {
+        reff = FirebaseDatabase.getInstance().getReference().child("user_roles").child(userId);
+
+        Map<String, Object> role = new HashMap<>();
+        role.put("role", ROLE_USER);
+
+        reff.setValue(role);
+    }
+
+    public void isAdmin(FirebaseService.isAdminCallback firebaseCallback, String userId) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("user_roles").child(userId);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String role = dataSnapshot.child("role").getValue(String.class);
+                if(role != null && role.equals(ROLE_ADMIN))
+                    firebaseCallback.onCallback(true);
+                else
+                    firebaseCallback.onCallback(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
