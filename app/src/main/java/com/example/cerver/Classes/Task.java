@@ -6,7 +6,9 @@ public class Task {
     private String Difficulty;
     private String Experience;
 
-    public Task (String title, String description, String difficulty, String experience) {
+    public Task(){}
+
+    public Task(String title, String description, String difficulty, String experience) {
         Title = title;
         Description = description;
         Difficulty = difficulty;

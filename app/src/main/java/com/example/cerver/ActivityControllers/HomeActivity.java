@@ -1,6 +1,5 @@
 package com.example.cerver.ActivityControllers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,8 +9,6 @@ import com.example.cerver.Classes.UserDetails;
 import com.example.cerver.R;
 import com.example.cerver.Services.FirebaseService;
 
-import android.util.Log;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -20,7 +17,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import com.example.cerver.Services.UserService;
 import com.example.cerver.ui.settings.SettingsFragment;
-import com.example.cerver.ui.share.TaskFragment;
+import com.example.cerver.ui.tasks.TaskFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

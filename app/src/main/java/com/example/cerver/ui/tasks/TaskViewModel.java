@@ -1,4 +1,4 @@
-package com.example.cerver.ui.share;
+package com.example.cerver.ui.tasks;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

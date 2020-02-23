@@ -55,4 +55,9 @@
     <string name="task_difficulty">Difficulty</string>
     <string name="task_experience">Experience</string>
     <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+    // Partial_task
+    <string name="experience">Experience: </string>
+    <string name="difficulty">Difficulty: </string>
 </resources>
