@@ -61,6 +61,8 @@ public class CreateTaskActivity extends AppCompatDialogFragment {
                     DatabaseReference result = taskService.createTask(taskTitle, taskDescription, taskDifficulty, taskExperience);
                     if(result != null) {
                         Toast.makeText(getActivity(), "Task created", Toast.LENGTH_SHORT).show();
+                        View taskLayout = getLayoutInflater().inflate(R.layout.fragment_task, null, false);
+                        
                         dialog.dismiss();
                     } else {
                         Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_SHORT).show();

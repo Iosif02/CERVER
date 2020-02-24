@@ -60,4 +60,6 @@
     // Partial_task
     <string name="experience">Experience: </string>
     <string name="difficulty">Difficulty: </string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
